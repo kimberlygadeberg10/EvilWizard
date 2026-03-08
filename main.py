@@ -123,8 +123,15 @@ def create_character():
 # ------------------------------
 # Battle System
 # ------------------------------
+
+import time  # For small pauses
+
 def battle(player, wizard):
     while wizard.health > 0 and player.health > 0:
+        print("\n" + "-"*30)
+        print(f"Your Health: {player.health}/{player.max_health} | Wizard Health: {wizard.health}/{wizard.max_health}")
+        print("-"*30)
+
         print("\n--- Your Turn ---")
         print("1. Attack")
         print("2. Use Special Ability")
@@ -138,18 +145,14 @@ def battle(player, wizard):
         # ----------------------
         if choice == '1':
             player.attack(wizard)
-
         elif choice == '2':
             if isinstance(player, Warrior):
                 print("Warrior has no special abilities yet. Using normal attack.")
                 player.attack(wizard)
-
             elif isinstance(player, Mage):
-                # Example Mage attack
                 damage = random.randint(player.attack_power, player.attack_power + 10)
                 wizard.health -= damage
-                print(f"{player.name} uses Fireball on {wizard.name} for {damage} damage!")
-
+                print(f"{player.name} casts Fireball on {wizard.name} for {damage} damage!")
             elif isinstance(player, Archer):
                 print("Choose Archer ability:")
                 print("1. Quick Shot")
@@ -161,7 +164,6 @@ def battle(player, wizard):
                     player.evade()
                 else:
                     print("Invalid ability. Skipping turn.")
-
             elif isinstance(player, Paladin):
                 print("Choose Paladin ability:")
                 print("1. Holy Strike")
@@ -173,21 +175,22 @@ def battle(player, wizard):
                     player.divine_shield()
                 else:
                     print("Invalid ability. Skipping turn.")
-
         elif choice == '3':
             player.heal()
-
         elif choice == '4':
             player.display_stats()
-
         else:
             print("Invalid choice. Try again.")
+
+        time.sleep(1)  # Small pause for readability
 
         # ----------------------
         # Wizard Turn
         # ----------------------
         if wizard.health > 0:
+            print("\n--- Wizard's Turn ---")
             wizard.regenerate()
+            time.sleep(1)
 
             # Handle defensive mechanics
             if isinstance(player, Archer) and player.evade_next:
@@ -200,11 +203,16 @@ def battle(player, wizard):
                 wizard.attack(player)
 
         # ----------------------
-        # Check if player is defeated
+        # Check for defeat
         # ----------------------
         if player.health <= 0:
-            print(f"{player.name} has been defeated!")
+            print(f"{player.name} has been defeated by {wizard.name}!")
             break
+        elif wizard.health <= 0:
+            print(f"{player.name} has defeated {wizard.name}! Victory!")
+            break
+
+        time.sleep(1)  # Pause between turns
 
     # ----------------------
     # End Game Messages
