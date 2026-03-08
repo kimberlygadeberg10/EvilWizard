@@ -35,9 +35,45 @@ class EvilWizard(Character):
         print(f"{self.name} regenerates 5 health! Current health: {self.health}")
 
 # Create Archer class
+import random  # Needed for random attack damage and heal amounts
 
+# Archer class (inherits from Character)
+class Archer(Character):
+    def __init__(self, name):
+        super().__init__(name, health=110, attack_power=30)
+        self.evade_next = False  # Tracks if Archer will evade the next attack
+
+    # Unique ability: Quick Shot (double attack)
+    def quick_shot(self, opponent):
+        damage1 = random.randint(int(self.attack_power * 0.8), int(self.attack_power * 1.2))
+        damage2 = random.randint(int(self.attack_power * 0.8), int(self.attack_power * 1.2))
+        total_damage = damage1 + damage2
+        opponent.health -= total_damage
+        print(f"{self.name} uses Quick Shot on {opponent.name} for {damage1} + {damage2} = {total_damage} damage!")
+
+    # Unique ability: Evade (avoids next attack)
+    def evade(self):
+        self.evade_next = True
+        print(f"{self.name} prepares to evade the next attack!")
+        
 # Create Paladin class 
+# Paladin class (inherits from Character)
+class Paladin(Character):
+    def __init__(self, name):
+        super().__init__(name, health=130, attack_power=20)
+        self.shield_next = False  # Tracks if Paladin will block the next attack
 
+    # Unique ability: Holy Strike (bonus damage attack)
+    def holy_strike(self, opponent):
+        bonus_damage = random.randint(10, 20)
+        total_damage = self.attack_power + bonus_damage
+        opponent.health -= total_damage
+        print(f"{self.name} uses Holy Strike on {opponent.name} for {total_damage} damage!")
+
+    # Unique ability: Divine Shield (blocks next attack)
+    def divine_shield(self):
+        self.shield_next = True
+        print(f"{self.name} raises Divine Shield to block the next attack!")
 
 def create_character():
     print("Choose your character class:")
