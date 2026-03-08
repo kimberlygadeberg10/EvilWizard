@@ -110,19 +110,62 @@ def battle(player, wizard):
         if choice == '1':
             player.attack(wizard)
         elif choice == '2':
-            pass  # Implement special abilities
-        elif choice == '3':
-            pass  # Implement heal method
-        elif choice == '4':
-            player.display_stats()
+    if isinstance(player, Warrior):
+        # Warrior doesn't have special abilities in this example
+        print("Warrior has no special abilities yet. Using normal attack.")
+        player.attack(wizard)
+
+    elif isinstance(player, Mage):
+        # Mage example abilities: Fireball & Ice Blast (you can implement later)
+        print("Mage uses Fireball!")
+        damage = random.randint(player.attack_power, player.attack_power + 10)
+        wizard.health -= damage
+        print(f"{player.name} hits {wizard.name} for {damage} damage!")
+
+    elif isinstance(player, Archer):
+        print("Choose Archer ability:")
+        print("1. Quick Shot")
+        print("2. Evade")
+        ability = input("Enter ability number: ")
+        if ability == '1':
+            player.quick_shot(wizard)
+        elif ability == '2':
+            player.evade()
         else:
+            print("Invalid ability. Skipping turn.")
+
+    elif isinstance(player, Paladin):
+        print("Choose Paladin ability:")
+        print("1. Holy Strike")
+        print("2. Divine Shield")
+        ability = input("Enter ability number: ")
+        if ability == '1':
+            player.holy_strike(wizard)
+        elif ability == '2':
+            player.divine_shield()
+        else:
+            print("Invalid ability. Skipping turn.")
+    elif choice == '3':
+            pass  # Implement heal method
+    elif choice == '4':
+            player.display_stats()
+    else:
             print("Invalid choice. Try again.")
 
-        if wizard.health > 0:
+    if wizard.health > 0:
             wizard.regenerate()
-            wizard.attack(player)
+            
+            # Check if player can evade or block
+            if isinstance(player, Archer) and player.evade_next:
+                print(f"{player.name} evades {wizard.name}'s attack!")
+                player.evade_next = False # Reset evade
+            elif isinstance(player, Paladin) and player.shield_next:
+                print(f"{player.name} blocks {wizard.name}'s attack with Divine Shield!")
+                player.shield_next = False # Reset shield
+            else:
+                wizard.attack(player)
 
-        if player.health <= 0:
+    if player.health <= 0:
             print(f"{player.name} has been defeated!")
             break
 
