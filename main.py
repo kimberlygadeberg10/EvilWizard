@@ -11,6 +11,7 @@ class Character:
         self.max_health = health
 
     # Normal attack with randomized damage
+    
     def attack(self, opponent):
         damage = random.randint(int(self.attack_power * 0.8), int(self.attack_power * 1.2))
         opponent.health -= damage
